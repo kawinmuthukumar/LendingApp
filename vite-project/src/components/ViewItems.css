@@ -1,0 +1,200 @@
+.items-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.items-container h2 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.item-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.item-header h3 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.available {
+  background-color: #dff6dd;
+  color: #2d5a27;
+}
+
+.status-badge.borrowed {
+  background-color: #fdecea;
+  color: #8f1d0f;
+}
+
+.item-description {
+  color: #34495e;
+  margin: 1rem 0;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+
+.item-details {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-owner, .item-owner-email {
+  color: #34495e;
+  font-size: 0.9rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-owner-email {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+}
+
+.item-footer {
+  margin-top: 1rem;
+}
+
+.action-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.action-message {
+  font-size: 0.85rem;
+  text-align: center;
+  color: #7f8c8d;
+}
+
+.action-button {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.action-button.borrow {
+  background-color: #3498db;
+  color: white;
+}
+
+.action-button.borrow:hover {
+  background-color: #2980b9;
+}
+
+.action-button.borrowed {
+  background-color: #e74c3c;
+  color: white;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.action-button.owner {
+  background-color: #2ecc71;
+  color: white;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #2c3e50;
+  font-size: 1.2rem;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #e74c3c;
+  font-size: 1.2rem;
+  background: #fdecea;
+  border-radius: 8px;
+  margin: 1rem;
+}
+
+@media (max-width: 768px) {
+  .items-container {
+    padding: 1rem;
+  }
+
+  .items-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .item-card {
+    padding: 1rem;
+  }
+
+  .item-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .status-badge {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .action-message {
+    font-size: 0.8rem;
+  }
+
+  .item-details {
+    padding: 0.8rem;
+  }
+
+  .item-owner, .item-owner-email {
+    font-size: 0.85rem;
+  }
+}
