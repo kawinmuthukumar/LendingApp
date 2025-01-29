@@ -6,6 +6,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import bcrypt from "bcrypt";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -92,10 +93,14 @@ app.post("/api/register", async (req, res) => {
             return res.status(409).json({ message: "Email already in use" });
         }
 
+        // Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
         // Use provided id or generate new one
         const userId = id || uuid();
         console.log('Creating new user with ID:', userId);
-        const newUser = new User({ id: userId, name, email, password });
+        const newUser = new User({ id: userId, name, email, password: hashedPassword });
         
         try {
             const savedUser = await newUser.save();
@@ -134,7 +139,9 @@ app.post("/api/users/login", async (req, res) => {
             return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        if (user.password !== password) {
+        // Compare password with hashed password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) {
             return res.status(401).json({ message: "Invalid email or password" });
         }
 
@@ -284,13 +291,15 @@ app.post("/api/transactions", async (req, res) => {
         const { itemId, borrowerId } = req.body;
         
         // Find the item first
-        const item = await Item.findById(itemId);
+        const item = await Item.findOne({ id: itemId });
         if (!item) {
+            console.log(`Item not found with id: ${itemId}`);
             return res.status(404).json({ message: "Item not found" });
         }
 
         // Check if user is trying to borrow their own item
         if (item.ownerId === borrowerId) {
+            console.log(`User ${borrowerId} attempted to borrow their own item ${itemId}`);
             return res.status(400).json({ 
                 message: "You cannot borrow your own item" 
             });
@@ -298,6 +307,7 @@ app.post("/api/transactions", async (req, res) => {
 
         // Check if item is already borrowed
         if (item.status === 'borrowed') {
+            console.log(`Item ${itemId} is already borrowed`);
             return res.status(400).json({ 
                 message: "This item is already borrowed" 
             });
@@ -305,21 +315,24 @@ app.post("/api/transactions", async (req, res) => {
 
         // Create new transaction
         const transaction = new Transaction({
+            id: uuid(),
             itemId,
             borrowerId,
             lenderId: item.ownerId,
-            status: 'active',
+            status: "Pending",
             borrowDate: new Date()
         });
 
         await transaction.save();
+        console.log(`Transaction created successfully: ${transaction.id}`);
 
         // Update item status
         item.status = 'borrowed';
         await item.save();
+        console.log(`Item ${itemId} status updated to borrowed`);
 
         res.status(201).json({ 
-            message: "Item borrowed successfully", 
+            message: "Transaction created successfully", 
             transaction 
         });
     } catch (err) {

@@ -34,7 +34,7 @@ const ViewItems = () => {
       });
       
       setItems(items.map(item => 
-        item._id === itemId 
+        item.id === itemId 
           ? { ...item, status: 'borrowed' }
           : item
       ));
@@ -89,7 +89,7 @@ const ViewItems = () => {
       <div className="action-info available">
         <button 
           className="action-button borrow"
-          onClick={() => handleBorrow(item._id)}
+          onClick={() => handleBorrow(item.id)}
         >
           Borrow Item
         </button>
@@ -111,7 +111,7 @@ const ViewItems = () => {
       ) : (
         <div className="items-grid">
           {items.map(item => (
-            <div key={item._id} className="item-card">
+            <div key={item.id} className="item-card">
               <div className="item-header">
                 <h3>{item.name}</h3>
                 <span className={getStatusBadgeClass(item.status || 'available')}>
