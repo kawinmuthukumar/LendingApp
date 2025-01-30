@@ -15,18 +15,11 @@ const Navbar = () => {
       setUserName(name || '');
     };
 
-    // Check initially
     checkLoginStatus();
-
-    // Add event listener for storage changes
     window.addEventListener('storage', checkLoginStatus);
     
-    // Check when component mounts
-    const interval = setInterval(checkLoginStatus, 1000);
-
     return () => {
       window.removeEventListener('storage', checkLoginStatus);
-      clearInterval(interval);
     };
   }, []);
 
@@ -37,13 +30,18 @@ const Navbar = () => {
     localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
     setUserName('');
-    navigate('/');
+    navigate('/', { replace: true });
+  };
+
+  const handleBrandClick = (e) => {
+    e.preventDefault();
+    navigate('/', { replace: true });
   };
 
   return (
     <nav className="navbar">
       <div className="nav-brand">
-        <Link to="/">LendingApp</Link>
+        <a href="/" onClick={handleBrandClick}>LendingApp</a>
       </div>
       <div className="nav-links">
         {isLoggedIn ? (
@@ -58,7 +56,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <Link to="/register" className="nav-link">Register</Link>
+            <Link to="/register" className="nav-link register-button">Register</Link>
             <Link to="/signin" className="nav-link">Sign In</Link>
           </>
         )}

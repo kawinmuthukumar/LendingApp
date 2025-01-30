@@ -1,45 +1,45 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import { useNavigate } from 'react-router-dom';
 import './AddItem.css';
 
 const AddItem = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    description: ''
-  });
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     const userId = localStorage.getItem('userId');
     if (!userId) {
-      setError('Please log in to add items');
+      setError('Please sign in to add items');
+      setLoading(false);
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/items', {
-        ...formData,
+      const response = await axios.post(`${API_BASE_URL}/api/items`, {
+        name,
+        description,
         ownerId: userId
       });
 
-      console.log('Item created:', response.data);
+      console.log('Item added:', response.data);
+      setName('');
+      setDescription('');
       navigate('/view-items');
     } catch (error) {
       console.error('Error adding item:', error);
       setError(error.response?.data?.message || 'Failed to add item');
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
   };
 
   return (
@@ -49,28 +49,28 @@ const AddItem = () => {
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit} className="add-item-form">
           <div className="form-group">
-            <label>Item Name</label>
+            <label>Item Name:</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
-              placeholder="Enter item name"
+              disabled={loading}
             />
           </div>
+
           <div className="form-group">
-            <label>Description</label>
+            <label>Description:</label>
             <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               required
-              placeholder="Enter item description"
+              disabled={loading}
             />
           </div>
-          <button type="submit" className="add-button">
-            Add Item
+
+          <button type="submit" disabled={loading} className="submit-button">
+            {loading ? 'Adding...' : 'Add Item'}
           </button>
         </form>
       </div>

@@ -14,6 +14,7 @@
 .navbar-container {
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .nav-brand {
@@ -40,15 +41,27 @@
 .nav-link {
   color: #2c3e50;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
   transition: all 0.3s ease;
   font-weight: 500;
 }
 
 .nav-link:hover {
-  color: #3498db;
   background: rgba(52, 152, 219, 0.1);
+}
+
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
 }
 
 .user-info {
@@ -62,19 +75,18 @@
 .welcome-text {
   color: #2c3e50;
   font-weight: 500;
-  white-space: nowrap;
+  margin-right: 1rem;
 }
 
 .logout-btn {
   background: none;
   border: none;
+  padding: 8px 16px;
   cursor: pointer;
-  font-size: 1rem;
+  font-weight: 500;
   color: #e74c3c;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 4px;
   transition: all 0.3s ease;
-  white-space: nowrap;
 }
 
 .logout-btn:hover {
@@ -82,28 +94,40 @@
   color: #c0392b;
 }
 
+.sign-out-btn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sign-out-btn:hover {
+  background-color: white;
+  color: #2c3e50;
+}
+
 .register-button {
   background-color: #3498db;
   padding: 8px 16px;
   border-radius: 4px;
+  color: white;
+  text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
 .register-button:hover {
   background-color: #2980b9;
-  color: white;
 }
 
 @media (max-width: 768px) {
   .navbar {
     padding: 1rem;
-    flex-direction: column;
-    gap: 1rem;
   }
 
   .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
     gap: 0.5rem;
   }
 
@@ -112,14 +136,29 @@
     font-size: 0.9rem;
   }
 
+  .nav-items {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-user {
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+  }
+
   .user-info {
     flex-direction: column;
-    align-items: center;
-    padding: 0.5rem 0;
+    padding-left: 0;
     border-left: none;
-    border-top: 2px solid rgba(44, 62, 80, 0.1);
-    width: 100%;
-    margin-top: 0.5rem;
+    gap: 0.5rem;
+    align-items: flex-end;
   }
 
   .welcome-text {

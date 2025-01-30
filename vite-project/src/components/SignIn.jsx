@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import './SignIn.css';
 
 const SignIn = () => {
@@ -11,13 +12,19 @@ const SignIn = () => {
   });
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    // Check if user is already logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (isLoggedIn) {
+      navigate('/view-items', { replace: true });
+    }
+  }, [navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      console.log('Attempting to sign in with:', formData.email);
-      const response = await axios.post('http://localhost:3000/api/users/login', formData);
-      console.log('Login response:', response.data);
+      const response = await axios.post(`${API_BASE_URL}/api/users/login`, formData);
       
       // Store user data
       localStorage.setItem('userId', response.data.userId);
@@ -25,8 +32,11 @@ const SignIn = () => {
       localStorage.setItem('userEmail', response.data.email);
       localStorage.setItem('isLoggedIn', 'true');
       
-      // Navigate to home page
-      navigate('/');
+      // Trigger a custom event to notify other components
+      window.dispatchEvent(new Event('storage'));
+      
+      // Navigate to view-items page
+      navigate('/view-items', { replace: true });
     } catch (error) {
       console.error('Login error:', error.response || error);
       if (error.response?.status === 401) {
